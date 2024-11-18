@@ -15,16 +15,23 @@ type Config struct {
 }
 
 func LoadConfig() *Config {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-	}
+	loadEnv()
 
 	return &Config{
 		FromEmail:    getEnv("FROM_EMAIL", ""),
 		SMTPPassword: getEnv("SMTP_PASSWORD", ""),
 		SMTPHost:     getEnv("FROM_EMAIL_SMTP", ""),
 		SMTPAddr:     getEnv("SMTP_ADDR", ""),
+	}
+}
+
+func loadEnv() {
+	if err := godotenv.Load(); err != nil {
+		log.Println(".env not found in /src, trying /etc/secrets/.env")
+
+		if err := godotenv.Load("/etc/secrets/.env"); err != nil {
+			log.Println(".env not found in /etc/secrets either, using system environment variables")
+		}
 	}
 }
 

@@ -11,7 +11,6 @@ FROM alpine:3.19
 WORKDIR /app
 
 COPY --from=builder /src/app .
-COPY --from=builder /src/.env .
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup && \
     chown -R appuser:appgroup /app
