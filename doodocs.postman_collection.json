@@ -1,0 +1,114 @@
+{
+	"info": {
+		"_postman_id": "812b2c92-0d68-46ec-82d4-9578c7c7cb50",
+		"name": "doodocs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29697650"
+	},
+	"item": [
+		{
+			"name": "archive files",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "files[]",
+							"type": "file",
+							"src": [
+								"/home/gontafi/Desktop/code/dd/test/data/file-sample_1MB.docx",
+								"/home/gontafi/Desktop/code/dd/test/data/cat.png",
+								"/home/gontafi/Desktop/code/dd/test/data/pizza.jpg",
+								"/home/gontafi/Desktop/code/dd/test/data/sample_xml.xml"
+							]
+						}
+					]
+				},
+				"url": {
+					"raw": "https://dd-mrhb.onrender.com/api/archive/files",
+					"protocol": "https",
+					"host": [
+						"dd-mrhb",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"archive",
+						"files"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "archive info",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/home/gontafi/Desktop/code/dd/results/archive.zip"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://dd-mrhb.onrender.com/api/archive/information",
+					"protocol": "https",
+					"host": [
+						"dd-mrhb",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"archive",
+						"information"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send file Email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/home/gontafi/Desktop/code/dd/test/data/sample.pdf"
+						},
+						{
+							"key": "emails",
+							"value": "gonta555@mail.ru",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/mail/file",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"mail",
+						"file"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
