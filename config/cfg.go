@@ -39,5 +39,6 @@ func getEnv(key, defaultValue string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value
 	}
+	log.Println("env value with that key was not found")
 	return defaultValue
 }
