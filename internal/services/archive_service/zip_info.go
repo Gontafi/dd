@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-func (z *ZipService) GetZipInfo(r io.ReaderAt, size int64) (*models.ZipInfo, error) {
+func (z *ZipService) GetZipInfo(filename string, r io.ReaderAt, size int64) (*models.ZipInfo, error) {
 	zipReader, err := zip.NewReader(r, size)
 	if err != nil {
 		return nil, err
@@ -21,30 +21,29 @@ func (z *ZipService) GetZipInfo(r io.ReaderAt, size int64) (*models.ZipInfo, err
 	errChan := make(chan error, len(zipReader.File))
 
 	for _, file := range zipReader.File {
-	    if file.FileInfo().IsDir() {
-	        // Skip directories
-	        continue
-	    }
-	
-	    wg.Add(1)
-	
-	    go func(f *zip.File) {
-	        defer wg.Done()
-	
-	        fileSize := float64(f.UncompressedSize64)
-	        mimeType := utils.DetectMimeTypeZip(f)
-	
-	        mu.Lock()
-	        files = append(files, models.FileMeta{
-	            FilePath: f.Name,
-	            Size:     fileSize,
-	            MimeType: mimeType,
-	        })
-	        totalSize += fileSize
-	        mu.Unlock()
-	    }(file)
-	}
+		if file.FileInfo().IsDir() {
+			// Skip directories
+			continue
+		}
 
+		wg.Add(1)
+
+		go func(f *zip.File) {
+			defer wg.Done()
+
+			fileSize := float64(f.UncompressedSize64)
+			mimeType := utils.DetectMimeTypeZip(f)
+
+			mu.Lock()
+			files = append(files, models.FileMeta{
+				FilePath: f.Name,
+				Size:     fileSize,
+				MimeType: mimeType,
+			})
+			totalSize += fileSize
+			mu.Unlock()
+		}(file)
+	}
 
 	wg.Wait()
 	close(errChan)

@@ -7,7 +7,7 @@ import (
 )
 
 type ZipServiceInterface interface {
-	GetZipInfo(r io.ReaderAt, size int64) (*models.ZipInfo, error)
+	GetZipInfo(filename string, r io.ReaderAt, size int64) (*models.ZipInfo, error)
 	CreateZip(files []multipart.File, filenames []string) (io.Reader, error)
 }
 
