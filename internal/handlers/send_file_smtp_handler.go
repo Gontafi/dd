@@ -36,7 +36,7 @@ func (h *HandlerV1) SendFileSMTPHandler(w http.ResponseWriter, r *http.Request) 
 		errors.Error(w, err, http.StatusBadRequest, "No emails provided")
 		return
 	}
-	emails := strings.Split(emailsStr, ",")
+	emails := strings.Split(strings.ReplaceAll(emailsStr, " ", ""), ","))
 
 	err = h.Services.SmtpService.SendToEmailList(header.Filename, file, emails)
 	if err != nil {
