@@ -21,24 +21,30 @@ func (z *ZipService) GetZipInfo(r io.ReaderAt, size int64) (*models.ZipInfo, err
 	errChan := make(chan error, len(zipReader.File))
 
 	for _, file := range zipReader.File {
-		wg.Add(1)
-
-		go func(f *zip.File) {
-			defer wg.Done()
-
-			fileSize := float64(f.UncompressedSize64)
-			mimeType := utils.DetectMimeTypeZip(f)
-
-			mu.Lock()
-			files = append(files, models.FileMeta{
-				FilePath: f.Name,
-				Size:     fileSize,
-				MimeType: mimeType,
-			})
-			totalSize += fileSize
-			mu.Unlock()
-		}(file)
+	    if file.FileInfo().IsDir() {
+	        // Skip directories
+	        continue
+	    }
+	
+	    wg.Add(1)
+	
+	    go func(f *zip.File) {
+	        defer wg.Done()
+	
+	        fileSize := float64(f.UncompressedSize64)
+	        mimeType := utils.DetectMimeTypeZip(f)
+	
+	        mu.Lock()
+	        files = append(files, models.FileMeta{
+	            FilePath: f.Name,
+	            Size:     fileSize,
+	            MimeType: mimeType,
+	        })
+	        totalSize += fileSize
+	        mu.Unlock()
+	    }(file)
 	}
+
 
 	wg.Wait()
 	close(errChan)
