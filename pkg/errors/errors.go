@@ -20,6 +20,7 @@ func Error(w http.ResponseWriter, err error, status int, msg ...string) {
 	}
 
 	if err != nil {
+		log.Println(err)
 		errResp.Error = true
 	}
 
