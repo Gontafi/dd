@@ -53,6 +53,7 @@ func (z *ZipService) GetZipInfo(filename string, r io.ReaderAt, size int64) (*mo
 	}
 
 	return &models.ZipInfo{
+		Filename:    filename,
 		TotalFiles:  float64(len(files)),
 		TotalSize:   totalSize,
 		ArchiveSize: float64(size),
